@@ -1,19 +1,44 @@
-static letters: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+use std::collections::HashMap;
+
+const letters: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
 pub struct Game {
-    quote: &str,
+    quote: String,
     mapping: HashMap<char, (char, char)>,
 }
 
 impl Game {
-    pub fn new(quote: &str);
+    pub fn new(quote: String) -> Game {
+        let quote_letters = quote_letters(quote);
+        let mut mapping: HashMap<_, _> = 
+            letters.clone()
+            .into_iter()
+            .zip(quote_letters
+                .into_iter()
+                .map(|letter| (letter, ' '))
+                .collect())
+            .collect();
 
-    pub fn update(key: char, guess: char);
+        Game {
+            quote,
+            mapping,
+        }
+    }
 
-    pub fn check() -> bool;
+    pub fn update(&self, key: char, guess: char) {
 
-    fn quote_letters() -> [char];
+    }
 
-    fn scrambled_quote() -> &str;
+    pub fn check(&self) -> bool {
+        true
+    }
+
+    fn quote_letters(quote: &str) -> [char] {
+
+    }
+
+    fn scrambled_quote(&self) -> String {
+        self.quote
+    }
 }

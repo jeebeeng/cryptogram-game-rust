@@ -5,13 +5,14 @@ use rand::seq::SliceRandom;
 const LETTERS: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-struct Game<'a> {
-    quote: &'a str,
+pub struct Game<'a> {
+    pub quote: &'a str,
+    pub author: &'a str,
     mapping: HashMap<String, (char, char)>,
 }
 
 impl<'a> Game<'a> {
-    pub fn new(quote: &'a str) -> Game<'a> {
+    pub fn new(quote: &'a str, author: &'a str) -> Game<'a> {
         // make the letters in the quote into a Vector of strings
         let quote_letters: Vec<String> = Game::quote_letters(&quote).into_iter()
             .map(|letter| letter.to_string()).collect();
@@ -33,6 +34,7 @@ impl<'a> Game<'a> {
             .collect();
 
         Game {
+            author,
             quote,
             mapping,
         }
@@ -57,14 +59,7 @@ impl<'a> Game<'a> {
         true
     }
 
-    fn quote_letters(quote: &str) -> Vec<char> {
-        quote.to_uppercase()
-            .chars()
-            .filter(|c| LETTERS.contains(c))
-            .collect()
-    }
-
-    fn scrambled_quote(&self) -> String {
+    pub fn scrambled_quote(&self) -> String {
         let mut scrambled_quote = String::new();
 
         for c in self.quote.to_uppercase().chars() {
@@ -80,5 +75,12 @@ impl<'a> Game<'a> {
         }
 
         scrambled_quote
+    }
+
+    fn quote_letters(quote: &str) -> Vec<char> {
+        quote.to_uppercase()
+            .chars()
+            .filter(|c| LETTERS.contains(c))
+            .collect()
     }
 }

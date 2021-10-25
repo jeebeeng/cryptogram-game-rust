@@ -5,13 +5,13 @@ use rand::seq::SliceRandom;
 const LETTERS: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-pub struct Game {
-    quote: String,
+pub struct Game<'a> {
+    quote: &'a str,
     mapping: HashMap<String, (char, char)>,
 }
 
-impl Game {
-    pub fn new(quote: String) -> Game {
+impl<'a> Game<'a> {
+    pub fn new(quote: &'a str) -> Game<'a> {
         // make the letters in the quote into a Vector of strings
         let quote_letters: Vec<String> = Game::quote_letters(&quote).into_iter()
             .map(|letter| letter.to_string()).collect();
@@ -23,7 +23,6 @@ impl Game {
         let letters: Vec<(char, char)> = letters.into_iter()        
             .map(|letter| return (letter, ' '))
             .collect();
-
 
         // maps each letter in letters to a tuple containing 
         // a letter in the quote and the guessed letter
@@ -39,8 +38,14 @@ impl Game {
         }
     }
 
-    pub fn update(&self, key: char, guess: char) {
-
+    pub fn update(&mut self, letter: &char, guess: &char) {
+        for (key, (value, _)) in &self.mapping.clone() {
+            if value == letter {
+                if let Some(_) = self.mapping.insert(key.to_string(), (*value, *guess)) {
+                    return ();
+                }
+            }
+        }
     }
 
     pub fn check(&self) -> bool {

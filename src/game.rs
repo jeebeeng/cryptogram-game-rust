@@ -5,7 +5,7 @@ use rand::seq::SliceRandom;
 const LETTERS: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
-pub struct Game<'a> {
+struct Game<'a> {
     quote: &'a str,
     mapping: HashMap<String, (char, char)>,
 }
@@ -65,6 +65,20 @@ impl<'a> Game<'a> {
     }
 
     fn scrambled_quote(&self) -> String {
-        String::from("")
+        let mut scrambled_quote = String::new();
+
+        for c in self.quote.to_uppercase().chars() {
+            if LETTERS.contains(&c) {
+                let value = match self.mapping.get(&c.to_string()) {
+                    Some((v, _)) => v.to_string(),
+                    _ => String::from(""),
+                };
+                scrambled_quote.push_str(&value);
+            } else {
+                scrambled_quote.push_str(&c.to_string());
+            }
+        }
+
+        scrambled_quote
     }
 }

@@ -12,16 +12,17 @@ pub struct Game {
 
 impl Game {
     pub fn new(quote: String) -> Game {
-        let quote_letters = Game::quote_letters(&quote);
+        // shuffle LETTERS and make each letter in LETTERS a String
         let mut letters: Vec<String> = LETTERS.clone().into_iter()
             .map(|letter| letter.to_string()).collect();
         letters.shuffle(&mut thread_rng());
 
+        let quote_letters = Game::quote_letters(&quote);
         let quote_letters: Vec<(char, char)> = quote_letters.into_iter()
                 .map(|letter| return (letter, ' '))
                 .collect();
 
-        // scrambles LETTERS and maps them to a tuple containing 
+        // maps each letter in letters to a tuple containing 
         // a letter in the quote and the guessed letter
         let mapping: HashMap<String, (char, char)> = 
             letters
@@ -51,6 +52,6 @@ impl Game {
     }
 
     fn scrambled_quote(&self) -> String {
-        self.quote
+        String::from("")
     }
 }

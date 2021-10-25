@@ -1,5 +1,7 @@
 mod game;
 
 fn main() {
-    println!("Hello, world!");
+    let game = game::Game::new("Hello world!", "John Bang");
+    println!("{}", game.scrambled_quote());
+    println!("{}", game.quote);
 }

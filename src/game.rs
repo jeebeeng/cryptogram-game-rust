@@ -10,8 +10,8 @@ pub struct Game {
 
 impl Game {
     pub fn new(quote: String) -> Game {
-        let quote_letters = quote_letters(quote);
-        let mut mapping: HashMap<_, _> = 
+        let quote_letters = Game::quote_letters(quote);
+        let mut mapping: HashMap<char, (char, char)> = 
             letters.clone()
             .into_iter()
             .zip(quote_letters
@@ -34,8 +34,8 @@ impl Game {
         true
     }
 
-    fn quote_letters(quote: &str) -> [char] {
-
+    fn quote_letters(quote: String) -> Vec<char> {
+        quote.chars().filter(|c| letters.contains(c)).collect()
     }
 
     fn scrambled_quote(&self) -> String {

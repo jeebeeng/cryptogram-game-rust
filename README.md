@@ -1,2 +1,2 @@
 # Cryptogram - Rust
-The cryptogram game written in Rust!
+The cryptogram game written in Rust

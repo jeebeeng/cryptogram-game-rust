@@ -49,6 +49,11 @@ impl<'a> Game<'a> {
     }
 
     pub fn check(&self) -> bool {
+        for (_, (value, guess)) in &self.mapping.clone() {
+            if value != guess {
+                return false;
+            }
+        }
         true
     }
 

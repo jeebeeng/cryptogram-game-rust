@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use rand::thread_rng;
 use rand::seq::SliceRandom;
+use itertools::Itertools;
 
 const LETTERS: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -8,14 +9,13 @@ const LETTERS: [char; 26] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', '
 pub struct Game<'a> {
     pub quote: &'a str,
     pub author: &'a str,
-    mapping: HashMap<String, (char, char)>,
+    mapping: HashMap<char, (char, char)>,
 }
 
 impl<'a> Game<'a> {
     pub fn new(quote: &'a str, author: &'a str) -> Game<'a> {
         // make the letters in the quote into a Vector of strings
-        let quote_letters: Vec<String> = Game::quote_letters(&quote).into_iter()
-            .map(|letter| letter.to_string()).collect();
+        let quote_letters: Vec<char> = Game::quote_letters(&quote).into_iter().collect();
 
         // shuffles LETTERS and map each letter into a tuple with the
         // letter and the guess
@@ -27,7 +27,7 @@ impl<'a> Game<'a> {
 
         // maps each letter in letters to a tuple containing 
         // a letter in the quote and the guessed letter
-        let mapping: HashMap<String, (char, char)> = 
+        let mapping: HashMap<char, (char, char)> = 
             quote_letters
             .into_iter()
             .zip(letters)
@@ -43,7 +43,7 @@ impl<'a> Game<'a> {
     pub fn update(&mut self, letter: &char, guess: &char) {
         for (key, (value, _)) in &self.mapping.clone() {
             if value == letter {
-                if let Some(_) = self.mapping.insert(key.to_string(), (*value, *guess)) {
+                if let Some(_) = self.mapping.insert(*key, (*value, *guess)) {
                     return ();
                 }
             }
@@ -64,7 +64,7 @@ impl<'a> Game<'a> {
 
         for c in self.quote.to_uppercase().chars() {
             if LETTERS.contains(&c) {
-                let value = match self.mapping.get(&c.to_string()) {
+                let value = match self.mapping.get(&c) {
                     Some((v, _)) => v.to_string(),
                     _ => String::from(""),
                 };
@@ -80,6 +80,7 @@ impl<'a> Game<'a> {
     fn quote_letters(quote: &str) -> Vec<char> {
         quote.to_uppercase()
             .chars()
+            .unique()
             .filter(|c| LETTERS.contains(c))
             .collect()
     }

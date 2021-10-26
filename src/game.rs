@@ -63,15 +63,11 @@ impl<'a> Game<'a> {
         let mut scrambled_quote = String::new();
 
         for c in self.quote.to_uppercase().chars() {
-            if LETTERS.contains(&c) {
-                let value = match self.mapping.get(&c) {
-                    Some((v, _)) => v.to_string(),
-                    _ => String::from(""),
-                };
-                scrambled_quote.push_str(&value);
-            } else {
-                scrambled_quote.push_str(&c.to_string());
-            }
+            let value = match self.mapping.get(&c) {
+                Some((v, _)) => v.to_string(),
+                _ => String::from(""),
+            };
+            scrambled_quote.push_str(&value);
         }
 
         scrambled_quote

@@ -11,8 +11,6 @@ pub struct Quote {
 
 pub async fn get_quote(url: String) -> Result<Quote, Box<dyn Error>> {
     let response = reqwest::get(url).await?;
-
     let quote: Quote = response.json().await?;
-
     Ok(quote)
 }
